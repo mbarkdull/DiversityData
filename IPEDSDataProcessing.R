@@ -35,7 +35,7 @@ IPEDS2019Long <- pivot_longer(IPEDS2019, cols = "C2019_A.Grand total":"Proportio
 
 # Plot completion data:
 BlackProportionPlotting <- function(data, plotname) {
-  plotname <- ggplot(data = data) + geom_col(mapping = aes(x = reorder(`institution name`, -ProportionBlack), y = ProportionBlack)) + theme(axis.text.x = element_text(angle = 90), axis.text = element_text(size = 2), axis.title = element_text(size = 3)) + annotate("segment", x = "Cornell University", xend = "Cornell University", y = 1, yend = 0, size = 1, alpha = 0.2, arrow = arrow())
+  plotname <- ggplot(data = data) + geom_col(mapping = aes(x = reorder(`institution name`, -ProportionBlack), y = ProportionBlack)) + theme(axis.text.x = element_text(angle = 90), axis.text = element_text(size = 2), axis.title = element_text(size = 3)) + annotate("segment", x = "Cornell University", xend = "Cornell University", y = 1, yend = 0, size = 0.1,  arrow = arrow())
   plot(plotname)
   #ggsave(filename = filename, plot = last_plot(), device = "pdf")
 }
