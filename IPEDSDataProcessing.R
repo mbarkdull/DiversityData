@@ -11,6 +11,13 @@ IPEDS2016 <- read_csv("./IPEDSData/CSV_1192020-687.csv")
 IPEDS2019 <- read_csv("./IPEDSData/CSV_1192020-519.csv")
 IPEDS2018 <- read_csv("./IPEDSData/CSV_1192020-366.csv")
 IPEDS2015 <- read_csv("./IPEDSData/CSV_1192020-194.csv")
+IPEDS2014 <- read_csv("./IPEDSData/CSV_1192020-505.csv")
+IPEDS2013 <- read_csv("./IPEDSData/CSV_1192020-591.csv")
+IPEDS2012 <- read_csv("./IPEDSData/CSV_1192020-351.csv")
+IPEDS2011 <- read_csv("./IPEDSData/CSV_1192020-245.csv")
+IPEDS2010 <- read_csv("./IPEDSData/CSV_1192020-162.csv")
+IPEDS2009 <- read_csv("./IPEDSData/CSV_1192020-649.csv")
+
 
 # Process the completion data:
 IPEDS2015 <- select(IPEDS2015, -c("unitid", "year", "C2015_A.First or Second Major", "C2015_A.CIP Code -  2010 Classification", "C2015_A.Award Level code", "CipTitle", "IDX_C"))
@@ -33,6 +40,22 @@ IPEDS2019 <- select(IPEDS2019, -c("unitid", "year", "C2019_A.First or Second Maj
 IPEDS2019$ProportionBlack <- IPEDS2019$"C2019_A.Black or African American total" / IPEDS2019$"C2019_A.Grand total"
 IPEDS2019Long <- pivot_longer(IPEDS2019, cols = "C2019_A.Grand total":"ProportionBlack")
 
+IPEDS2014 <- select(IPEDS2014, -c("unitid", "year", "C2014_A.First or Second Major", "C2014_A.CIP Code -  2010 Classification", "C2014_A.Award Level code", "CipTitle", "IDX_C"))
+IPEDS2014$ProportionBlack <- IPEDS2014$"C2014_A_RV.Black or African American total" / IPEDS2014$"C2014_A_RV.Grand total"
+IPEDS2014Long <- pivot_longer(IPEDS2014, cols = "C2014_A_RV.Grand total":"ProportionBlack")
+
+IPEDS2013 <- select(IPEDS2013, -c("unitid", "year", "C2013_A.First or Second Major", "C2013_A.CIP Code -  2010 Classification", "C2013_A.Award Level code", "CipTitle", "IDX_C"))
+IPEDS2013$ProportionBlack <- IPEDS2013$"C2013_A_RV.Black or African American total" / IPEDS2013$"C2013_A_RV.Grand total"
+IPEDS2013Long <- pivot_longer(IPEDS2013, cols = "C2013_A_RV.Grand total":"ProportionBlack")
+
+IPEDS2012 <- select(IPEDS2012, -c("unitid", "year", "C2012_A.First or Second Major", "C2012_A.CIP Code -  2010 Classification", "C2012_A.Award Level code", "CipTitle", "IDX_C"))
+IPEDS2012$ProportionBlack <- IPEDS2012$"C2012_A_RV.Black or African American total" / IPEDS2012$"C2012_A_RV.Grand total"
+IPEDS2012Long <- pivot_longer(IPEDS2012, cols = "C2012_A_RV.Grand total":"ProportionBlack")
+
+IPEDS2011 <- select(IPEDS2011, -c("unitid", "year", "C2011_A.First or Second Major", "C2011_A.CIP Code -  2010 Classification", "C2011_A.Award Level code", "CipTitle", "IDX_C"))
+IPEDS2011$ProportionBlack <- IPEDS2011$"C2011_A_RV.Black or African American total" / IPEDS2011$"C2011_A_RV.Grand total"
+IPEDS2011Long <- pivot_longer(IPEDS2011, cols = "C2011_A_RV.Grand total":"ProportionBlack")
+
 # Plot completion data:
 BlackProportionPlotting <- function(data, plotname, title) {
   plotname <- ggplot(data = data) + 
@@ -42,7 +65,7 @@ BlackProportionPlotting <- function(data, plotname, title) {
           axis.title = element_text(size = 2), 
           axis.line = element_line(size = 0.1), 
           axis.ticks = element_line(size = 0.05), 
-          plot.title = element_text(size = 5)) + 
+          plot.title = element_text(size = 3)) + 
     annotate("segment", 
              x = "Cornell University", 
              xend = "Cornell University", 
@@ -52,17 +75,22 @@ BlackProportionPlotting <- function(data, plotname, title) {
              arrow = arrow()) + 
     labs(title = title, 
          x = "Institution", 
-         y = "Proportion of PhD Awardees who are Black") +
+         y = "Proportion of PhD Recipients who are Black") +
     coord_flip()
   plot(plotname)
 }
 
+BPC2011 <- BlackProportionPlotting(IPEDS2011, "BPC2011", "Proportion of \nBlack PhD Recipients (2011)")
+BPC2012 <- BlackProportionPlotting(IPEDS2012, "BPC2012", "Proportion of \nBlack PhD Recipients (2012)")
+BPC2013 <- BlackProportionPlotting(IPEDS2013, "BPC2013", "Proportion of \nBlack PhD Recipients (2013)")
+BPC2014 <- BlackProportionPlotting(IPEDS2014, "BPC2014", "Proportion of \nBlack PhD Recipients (2014)")
 BPC2015 <- BlackProportionPlotting(IPEDS2015, "BPC2015", "Proportion of \nBlack PhD Recipients (2015)")
 BPC2016 <- BlackProportionPlotting(IPEDS2016, "BPC2016", "Proportion of \nBlack PhD Recipients (2016)")
 BPC2017 <- BlackProportionPlotting(IPEDS2017, "BPC2017", "Proportion of \nBlack PhD Recipients (2017)")
 BPC2018 <- BlackProportionPlotting(IPEDS2018, "BPC2018", "Proportion of \nBlack PhD Recipients (2018)")
 BPC2019 <- BlackProportionPlotting(IPEDS2019, "BPC2019", "Proportion of \nBlack PhD Recipients (2019)")
 
-BPCCombined <- ggarrange(BPC2015, BPC2016, BPC2017, BPC2018, BPC2019, ncol = 2, nrow = 3)
+BPCCombined <- ggarrange(BPC2011, BPC2012, BPC2013, BPC2014, BPC2015, BPC2016, BPC2017, BPC2018, BPC2019, ncol = 3, nrow = 3)
 plot(BPCCombined)
 ggsave(filename = "BPCCombined.pdf", plot = last_plot(), device = "pdf")
+
