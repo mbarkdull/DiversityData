@@ -6,17 +6,17 @@ library(ggpubr)
 theme_set(theme_pubr())
 
 # Read completion data files:
-IPEDS2017 <- read_csv("./IPEDSData/CSV_1192020-936.csv")
-IPEDS2016 <- read_csv("./IPEDSData/CSV_1192020-687.csv")
-IPEDS2019 <- read_csv("./IPEDSData/CSV_1192020-519.csv")
-IPEDS2018 <- read_csv("./IPEDSData/CSV_1192020-366.csv")
-IPEDS2015 <- read_csv("./IPEDSData/CSV_1192020-194.csv")
-IPEDS2014 <- read_csv("./IPEDSData/CSV_1192020-505.csv")
-IPEDS2013 <- read_csv("./IPEDSData/CSV_1192020-591.csv")
-IPEDS2012 <- read_csv("./IPEDSData/CSV_1192020-351.csv")
-IPEDS2011 <- read_csv("./IPEDSData/CSV_1192020-245.csv")
-IPEDS2010 <- read_csv("./IPEDSData/CSV_1192020-162.csv")
-IPEDS2009 <- read_csv("./IPEDSData/CSV_1192020-649.csv")
+IPEDS2017 <- read_csv("./IPEDSData/phd/CSV_1192020-936.csv")
+IPEDS2016 <- read_csv("./IPEDSData/phd/CSV_1192020-687.csv")
+IPEDS2019 <- read_csv("./IPEDSData/phd/CSV_1192020-519.csv")
+IPEDS2018 <- read_csv("./IPEDSData/phd/CSV_1192020-366.csv")
+IPEDS2015 <- read_csv("./IPEDSData/phd/CSV_1192020-194.csv")
+IPEDS2014 <- read_csv("./IPEDSData/phd/CSV_1192020-505.csv")
+IPEDS2013 <- read_csv("./IPEDSData/phd/CSV_1192020-591.csv")
+IPEDS2012 <- read_csv("./IPEDSData/phd/CSV_1192020-351.csv")
+IPEDS2011 <- read_csv("./IPEDSData/phd/CSV_1192020-245.csv")
+IPEDS2010 <- read_csv("./IPEDSData/phd/CSV_1192020-162.csv")
+IPEDS2009 <- read_csv("./IPEDSData/phd/CSV_1192020-649.csv")
 
 
 # Process the completion data:
@@ -75,7 +75,7 @@ BlackProportionPlotting <- function(data, plotname, title) {
              arrow = arrow()) + 
     labs(title = title, 
          x = "Institution", 
-         y = "Proportion of PhD Recipients who are Black") +
+         y = "Proportion of Degree Recipients who are Black") +
     coord_flip()
   plot(plotname)
 }
@@ -94,3 +94,17 @@ BPCCombined <- ggarrange(BPC2011, BPC2012, BPC2013, BPC2014, BPC2015, BPC2016, B
 plot(BPCCombined)
 ggsave(filename = "BPCCombined.pdf", plot = last_plot(), device = "pdf")
 
+# Do the same thing but with data for baccalaureate degrees:
+
+# Read in data:
+Undergrad2019 <- read_csv("./IPEDSData/undergrad/2019.csv")
+
+# Process data:
+Undergrad2019 <- select(Undergrad2019, -c("unitid", "year", "C2019_A.First or Second Major", "C2019_A.CIP Code -  2010 Classification", "C2019_A.Award Level code", "CipTitle", "IDX_C"))
+Undergrad2019$ProportionBlack <- Undergrad2019$"C2019_A.Black or African American total" / Undergrad2019$"C2019_A.Grand total"
+Undergrad2019Long <- pivot_longer(Undergrad2019, cols = "C2019_A.Grand total":"ProportionBlack")
+
+# Plot the data:
+Undergrad2019Plot <- BlackProportionPlotting(Undergrad2019, "U2019", "Proportion of Black \nBachelor's Degree Recipients (2019)")
+
+ggsave(filename = "UndergradCombined.pdf", plot = last_plot(), device = "pdf")
