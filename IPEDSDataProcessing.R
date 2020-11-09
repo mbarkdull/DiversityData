@@ -38,7 +38,7 @@ BlackProportionPlotting <- function(data, plotname, title) {
   plotname <- ggplot(data = data) + 
     geom_col(mapping = aes(x = reorder(`institution name`, -ProportionBlack), y = ProportionBlack)) + 
     theme(axis.text.x = element_text(angle = 90), 
-          axis.text = element_text(size = 2), 
+          axis.text = element_text(size = 1), 
           axis.title = element_text(size = 2), 
           axis.line = element_line(size = 0.1), 
           axis.ticks = element_line(size = 0.05), 
